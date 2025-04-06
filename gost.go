@@ -1,11 +1,11 @@
 package main
 
 import (
-	_ "Daizen/markdown"
-	"Daizen/plugins"
-	"Daizen/renderer"
-	"Daizen/site"
-	"Daizen/theme"
+	_ "github.com/OblivionOcean/Daizen/markdown"
+	"github.com/OblivionOcean/Daizen/plugins"
+	"github.com/OblivionOcean/Daizen/renderer"
+	"github.com/OblivionOcean/Daizen/site"
+	"github.com/OblivionOcean/Daizen/theme"
 )
 
 func main() {

@@ -2,12 +2,12 @@ package renderer
 
 import (
 	"fmt"
-	"Daizen/cache"
-	"Daizen/internal/router"
-	"Daizen/model"
-	"Daizen/page"
-	"Daizen/site"
-	"Daizen/utils"
+	"github.com/OblivionOcean/Daizen/cache"
+	"github.com/OblivionOcean/Daizen/internal/router"
+	"github.com/OblivionOcean/Daizen/model"
+	"github.com/OblivionOcean/Daizen/page"
+	"github.com/OblivionOcean/Daizen/site"
+	"github.com/OblivionOcean/Daizen/utils"
 	"os"
 	"runtime"
 	"sync"

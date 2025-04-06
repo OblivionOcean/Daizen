@@ -2,7 +2,7 @@ package renderer
 
 import (
 	"errors"
-	"Daizen/utils"
+	"github.com/OblivionOcean/Daizen/utils"
 	"os"
 	"path"
 )

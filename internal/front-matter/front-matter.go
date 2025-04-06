@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"Daizen/utils"
+	"github.com/OblivionOcean/Daizen/utils"
 	"os"
 
 	"github.com/pelletier/go-toml/v2"

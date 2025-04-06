@@ -3,10 +3,10 @@ package site
 import (
 	"encoding/json"
 	"errors"
-	"Daizen/cache"
-	"Daizen/model"
-	"Daizen/theme"
-	"Daizen/utils"
+	"github.com/OblivionOcean/Daizen/cache"
+	"github.com/OblivionOcean/Daizen/model"
+	"github.com/OblivionOcean/Daizen/theme"
+	"github.com/OblivionOcean/Daizen/utils"
 	"os"
 	"strings"
 

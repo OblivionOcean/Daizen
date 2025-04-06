@@ -3,8 +3,8 @@ package markdown
 import (
 	"runtime"
 
-	"Daizen/extend/renderer"
-	"Daizen/utils"
+	"github.com/OblivionOcean/Daizen/extend/renderer"
+	"github.com/OblivionOcean/Daizen/utils"
 
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"

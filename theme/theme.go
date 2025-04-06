@@ -1,11 +1,11 @@
 package theme
 
 import (
-	"Daizen/model"
-	"Daizen/utils"
 	"bytes"
 	"encoding/json"
 	"errors"
+	"github.com/OblivionOcean/Daizen/model"
+	"github.com/OblivionOcean/Daizen/utils"
 	"os"
 	"plugin"
 	"runtime"

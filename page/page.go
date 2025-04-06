@@ -1,12 +1,12 @@
 package page
 
 import (
-	"Daizen/extend/renderer"
-	frontmatter "Daizen/internal/front-matter"
-	"Daizen/model"
-	"Daizen/site"
-	"Daizen/theme"
-	"Daizen/utils"
+	"github.com/OblivionOcean/Daizen/extend/renderer"
+	frontmatter "github.com/OblivionOcean/Daizen/internal/front-matter"
+	"github.com/OblivionOcean/Daizen/model"
+	"github.com/OblivionOcean/Daizen/site"
+	"github.com/OblivionOcean/Daizen/theme"
+	"github.com/OblivionOcean/Daizen/utils"
 	"os"
 	"path"
 )

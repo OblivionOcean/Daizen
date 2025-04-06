@@ -1,4 +1,4 @@
-module Daizen
+module github.com/OblivionOcean/Daizen
 
 go 1.24.0
 

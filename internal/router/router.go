@@ -1,10 +1,10 @@
 package router
 
 import (
-	"Daizen/extend/renderer"
-	"Daizen/model"
-	"Daizen/site"
-	"Daizen/utils"
+	"github.com/OblivionOcean/Daizen/extend/renderer"
+	"github.com/OblivionOcean/Daizen/model"
+	"github.com/OblivionOcean/Daizen/site"
+	"github.com/OblivionOcean/Daizen/utils"
 	"os"
 	"path"
 )
