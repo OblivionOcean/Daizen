@@ -29,3 +29,5 @@ func LoadPlugins() {
 		}
 	}
 }
+
+var Plugins = []string{}
