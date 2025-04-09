@@ -7,8 +7,6 @@ import (
 	"github.com/OblivionOcean/Daizen/model"
 	"github.com/OblivionOcean/Daizen/utils"
 	"os"
-	"plugin"
-	"runtime"
 
 	"github.com/pelletier/go-toml/v2"
 	"gopkg.in/yaml.v3"
@@ -81,28 +79,4 @@ func RegRootLayout(f func(site *model.SiteInfo, page *model.Page, body *bytes.Bu
 
 func GetRootLayout() func(site *model.SiteInfo, page *model.Page, body *bytes.Buffer, buf *bytes.Buffer) {
 	return Theme.RootLayout
-}
-
-func LoadTheme() {
-	pluginsFiles, err := os.ReadDir("theme/src")
-	if err != nil {
-		panic(err)
-	}
-	for _, file := range pluginsFiles {
-		if file.IsDir() {
-			continue
-		}
-		filename := file.Name()
-		if len(filename) >= 4 && filename[len(filename)-4:] == ".dll" && runtime.GOOS == "windows" {
-			_, err := plugin.Open("theme/src/" + filename)
-			if err != nil {
-				panic(err)
-			}
-		} else if len(filename) >= 3 && filename[len(filename)-3:] == ".so" {
-			_, err := plugin.Open("theme/src/" + filename)
-			if err != nil {
-				panic(err)
-			}
-		}
-	}
 }
