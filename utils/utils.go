@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"os/exec"
 	"path"
 	"path/filepath"
 	"unsafe"
@@ -196,4 +197,11 @@ func Log(l int, v ...any) {
 	}
 	t2 := []any{t}
 	log.Println(append(t2, v...)...)
+}
+
+func Exec(name string, arg ...string) error {
+	cmd := exec.Command(name, arg...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
 }

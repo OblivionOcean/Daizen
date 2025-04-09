@@ -1,6 +1,7 @@
 package plugins
 
 import (
+	"github.com/OblivionOcean/Daizen/utils"
 	"os"
 	"runtime"
 )
@@ -23,6 +24,15 @@ func InstallPlugin(name string) {
 	if err := GenerateGoMod(); err != nil {
 		panic(err)
 	}
+	os.Chdir(".daizen/temp")
+	// 执行go mod tidy
+	if err := utils.Exec("go", "mod", "tidy"); err != nil {
+		panic(err)
+	}
+	// 执行go build -o daizen.
+	if err := utils.Exec("go", "build"); err != nil {
+		panic(err)
+	}
 }
 
 func GenerateTemp() error {
@@ -36,7 +46,7 @@ func GenerateGoMod() error {
 		return err
 	}
 	defer f.Close()
-	_, err = f.WriteString("module daizen\n\ngo " + runtime.Version() + "\n")
+	_, err = f.WriteString("module Daizen\n\ngo " + runtime.Version() + "\n")
 	return err
 }
 
@@ -55,7 +65,7 @@ import (
 	}
 	f.WriteString(`
 	)
-	
+
 func main() {
 	cmd.Generate()
 }
