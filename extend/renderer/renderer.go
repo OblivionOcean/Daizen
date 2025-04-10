@@ -2,9 +2,10 @@ package renderer
 
 import (
 	"errors"
-	"github.com/OblivionOcean/Daizen/utils"
 	"os"
 	"path"
+
+	"github.com/OblivionOcean/Daizen/utils"
 )
 
 type Name struct {

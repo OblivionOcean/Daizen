@@ -14,7 +14,7 @@ var Cache map[string]model.Cache
 var CacheLength = 0
 
 func LoadCache() {
-	tmp, err := os.ReadFile(".cache")
+	tmp, err := os.ReadFile(".dsizen/.cache")
 	if err != nil {
 		Cache = make(map[string]model.Cache, 150)
 		return
@@ -67,7 +67,7 @@ func SaveCache() {
 		buf.Write(Encode(c.Content))
 		buf.WriteByte('\n')
 	}
-	err := utils.WriteFile(".cache", buf.Bytes())
+	err := utils.WriteFile(".daizen/.cache", buf.Bytes())
 	if err != nil {
 		fmt.Println(err.Error())
 	}

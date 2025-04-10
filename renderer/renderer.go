@@ -2,21 +2,27 @@ package renderer
 
 import (
 	"fmt"
-	"github.com/OblivionOcean/Daizen/cache"
-	"github.com/OblivionOcean/Daizen/internal/router"
-	"github.com/OblivionOcean/Daizen/model"
-	"github.com/OblivionOcean/Daizen/page"
-	"github.com/OblivionOcean/Daizen/site"
-	"github.com/OblivionOcean/Daizen/utils"
 	"os"
 	"runtime"
 	"sync"
 	"time"
 
+	"github.com/OblivionOcean/Daizen/cache"
+	"github.com/OblivionOcean/Daizen/extend/renderer"
+	"github.com/OblivionOcean/Daizen/internal/router"
+	"github.com/OblivionOcean/Daizen/markdown"
+	"github.com/OblivionOcean/Daizen/model"
+	"github.com/OblivionOcean/Daizen/page"
+	"github.com/OblivionOcean/Daizen/site"
+	"github.com/OblivionOcean/Daizen/utils"
+
 	"github.com/fatih/color"
 )
 
 func RenderSite() error {
+	if renderer.FindRenderer(".md", ".html") == nil {
+		markdown.InitPlugin()
+	}
 	startTime := time.Now().UnixMicro()
 	sourceDir := "source"
 	if site.Site.Cfg["source_dir"] != nil {
@@ -121,7 +127,7 @@ func RenderSite() error {
 	wg.Wait()
 	utils.Log(utils.Info, "Generated", pageLength, "pages in", float64(time.Now().UnixMicro()-startTime)/1e3, "ms")
 	if pageLength > 500 && pageLength < 5000 {
-		utils.Log(utils.Info, "Saving cache to \".cache\"...")
+		utils.Log(utils.Info, "Saving cache to \".daizen/.cache\"...")
 		cache.SaveCache()
 	}
 	color.Blue("Bye!")

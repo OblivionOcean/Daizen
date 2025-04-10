@@ -12,7 +12,7 @@ import (
 	"github.com/yuin/goldmark/renderer/html"
 )
 
-func init() {
+func InitPlugin() {
 	md := &Markdown{
 		Markdown: goldmark.New(
 			goldmark.WithExtensions(extension.GFM),
