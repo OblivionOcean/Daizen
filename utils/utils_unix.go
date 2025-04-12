@@ -12,7 +12,7 @@ func GetModTime(path string) (int64, error) {
 	if err := syscall.Stat(path, &stat); err != nil {
 		return 0, err
 	}
-	return stat.Mtimespec.Nano(), nil // 直接返回纳秒级时间戳
+	return stat.Mtime.Nano(), nil // 直接返回纳秒级时间戳
 }
 
 func fileExists(path string) (bool, error) {
