@@ -12,7 +12,7 @@ import (
 )
 
 func Generate() {
-	os.MkdirAll("./.daizen/tmp", os.ModePerm)
+	os.MkdirAll("./.daizen", os.ModePerm)
 	err := site.LoadConfig()
 	if err != nil {
 		panic(err.Error())

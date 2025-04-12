@@ -47,32 +47,27 @@ func Rebuild() {
 	// 生成临时文件夹
 	if err := GenerateTemp(); err != nil {
 		utils.Log(utils.Error, "GenerateTemp error: ", err)
-		os.RemoveAll("./.daizen/tmp")
 		return
 	}
 	// 生成main.go文件
 	if err := GenerateMainGo(); err != nil {
 		utils.Log(utils.Error, "GenerateMainGo error: ", err)
-		os.RemoveAll("./.daizen/tmp")
 		return
 	}
 	// 生成go mod文件
 	if err := GenerateGoMod(); err != nil {
 		utils.Log(utils.Error, "GenerateGoMod error: ", err)
-		os.RemoveAll("./.daizen/tmp")
 		return
 	}
 	os.Chdir("./.daizen/tmp")
 	// 执行go mod tidy
 	if err := utils.Exec("go", "mod", "tidy"); err != nil {
 		utils.Log(utils.Error, "go mod tidy error: ", err)
-		os.RemoveAll("./.daizen/tmp")
 		return
 	}
 	// 执行go build -o daizen.
 	if err := utils.Exec("go", "build", "-o", "../Daizen"+ExecExt()); err != nil {
 		utils.Log(utils.Error, "go build error: ", err)
-		os.RemoveAll("./.daizen/tmp")
 		return
 	}
 	os.Chdir("../..")
@@ -107,6 +102,7 @@ func GenerateMainGo() error {
 	f.WriteString(`package main
 import (
 "github.com/OblivionOcean/Daizen/cmd"
+"github.com/OblivionOcean/Daizen/plugins"
 `)
 	for _, p := range Plugins {
 		f.WriteString(`_ "` + p + "\"\n")
@@ -115,6 +111,11 @@ import (
 	)
 
 func main() {
+	plugins.Plugins = append(plugins.Plugins, `)
+	for _, p := range Plugins {
+		f.WriteString(`"` + p + `", `)
+	}
+	f.WriteString(`)
 	cmd.CMD(false)
 }
 `)
