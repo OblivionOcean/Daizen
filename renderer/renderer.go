@@ -17,6 +17,7 @@ import (
 	"github.com/OblivionOcean/Daizen/utils"
 
 	"github.com/fatih/color"
+	"github.com/panjf2000/ants/v2"
 )
 
 func RenderSite() error {
@@ -24,6 +25,7 @@ func RenderSite() error {
 		markdown.InitPlugin()
 	}
 	startTime := time.Now().UnixMicro()
+	pool, _ := ants.NewPool(runtime.NumCPU(), ants.WithPreAlloc(true))
 	sourceDir := "source"
 	if site.Site.Cfg["source_dir"] != nil {
 		sourceDir = site.Site.Cfg["source_dir"].(string)
@@ -39,7 +41,7 @@ func RenderSite() error {
 			utils.Log(utils.Error, err.Error(), " on ", path)
 		}
 		wg.Add(1)
-		go func() {
+		pool.Submit(func() {
 			r := model.Router{Src: path}
 			r = router.Processing(r)
 			pageInfo := model.Page{Router: r}
@@ -97,7 +99,7 @@ func RenderSite() error {
 			cache.Cache[r.FilePath] = c
 			cmu.Unlock()
 			wg.Done()
-		}()
+		})
 		return nil
 	})
 	wg.Wait()
@@ -105,7 +107,7 @@ func RenderSite() error {
 	bufPool := utils.NewBufferPool(runtime.NumCPU())
 	for i := 0; i < pageLength; i++ {
 		wg.Add(1)
-		go func(i int) {
+		pool.Submit(func() {
 			pageInfo := &site.Site.Pages[i]
 			err = page.RenderPage(pageInfo, bufPool)
 			if err != nil {
@@ -116,12 +118,12 @@ func RenderSite() error {
 				}
 			}
 			wg.Done()
-		}(i)
+		})
 		if i == -1 {
-			go func() {
+			pool.Submit(func() {
 				color.Magenta("...too more page")
 				fmt.Println("Please wait...")
-			}()
+			})
 		}
 	}
 	wg.Wait()

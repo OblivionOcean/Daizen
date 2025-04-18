@@ -56,7 +56,7 @@ func Slice(str string, start, end int) string {
 //go:inline
 func WriteFile(path string, b []byte) error {
 	bLength := len(b)
-	file, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_RDWR, 0666)
+	file, err := os.OpenFile(path, os.O_CREATE|os.O_RDWR, 0666)
 	if err != nil {
 		return err
 	}
