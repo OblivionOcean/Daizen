@@ -90,11 +90,20 @@ regcmd:
 			plugins.Rebuild()
 		},
 	}
+
+	rebuildCmd := &cobra.Command{
+		Use:   "rebuild",
+		Short: "Rebuild the Daizen",
+		Long:  "Rebuild the Daizen",
+		Run: func(cmd *cobra.Command, args []string) {
+			plugins.Rebuild()
+		},
+	}
 	rootCmd := &cobra.Command{
 		Use:   "daizen",
 		Short: "A static site generator",
 		Long:  "A static site generator",
 	}
-	rootCmd.AddCommand(genCmd, installCmd, uninstallCmd, listPluginCmd, resetCmd)
+	rootCmd.AddCommand(genCmd, installCmd, uninstallCmd, listPluginCmd, resetCmd, rebuildCmd)
 	rootCmd.Execute()
 }
