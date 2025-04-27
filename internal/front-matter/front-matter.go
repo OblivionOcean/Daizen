@@ -3,9 +3,9 @@ package frontmatter
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
-	"github.com/OblivionOcean/Daizen/utils"
 	"os"
+
+	"github.com/OblivionOcean/Daizen/utils"
 
 	"github.com/pelletier/go-toml/v2"
 	"gopkg.in/yaml.v3"
@@ -22,61 +22,15 @@ func FrontMatter(src string) (map[string]any, []byte, error) {
 		return nil, rawContent, nil
 	}
 	if content[0] == '{' {
-		count := 1
-		contentLength := len(content)
-		i := 0
-		for ; i < contentLength; i++ {
-			if content[i] == '{' {
-				count++
-			}
-			if content[i] == '}' {
-				count--
-			}
-			if count == 0 {
-				break
-			}
-		}
-		err = json.Unmarshal(content[:i], &obj)
-		if err != nil {
-			return nil, content[i+1:], err
-		}
+		content, err = handleNoSepJson(content, &obj)
+		return obj, content, err
 	}
 	if len(content) < 6 {
 		return nil, rawContent, nil
 	}
-	switch utils.Bytes2String(content[:3]) {
-	case "---":
-		content = getContent(content, "---")
-		if content == nil {
-			return nil, content, nil
-		}
-		err = yaml.Unmarshal(content, &obj)
-		if err != nil {
-			fmt.Println(utils.Bytes2String(content))
-			return nil, rawContent[len(content)+3:], err
-		}
-	case "+++":
-		content = getContent(content, "+++")
-		if content == nil {
-			return nil, content, nil
-		}
-		err = toml.Unmarshal(content, &obj)
-		if err != nil {
-			return nil, rawContent[len(content)+3:], err
-		}
-	case ";;;":
-		content = getContent(content, ";;;")
-		if content == nil {
-			return nil, content, nil
-		}
-		err = json.Unmarshal(content, &obj)
-		if err != nil {
-			return nil, rawContent[len(content)+3:], err
-		}
-	default:
-		return nil, rawContent, nil
-	}
-	return obj, rawContent, nil
+	content, err = handleNormal(rawContent, content, &obj)
+	return obj, content, err
+
 }
 
 func getContent(content []byte, sep string) []byte {
@@ -85,4 +39,60 @@ func getContent(content []byte, sep string) []byte {
 		return nil
 	}
 	return tmp[0]
+}
+
+func handleNoSepJson(content []byte, obj *map[string]any) ([]byte, error) {
+	count := 1
+	contentLength := len(content)
+	i := 0
+	for ; i < contentLength; i++ {
+		if content[i] == '{' {
+			count++
+		}
+		if content[i] == '}' {
+			count--
+		}
+		if count == 0 {
+			break
+		}
+	}
+	err := json.Unmarshal(content[:i], &obj)
+
+	return content[i+1:], err
+
+}
+
+func handleNormal(rawContent, content []byte, obj *map[string]any) (b []byte, err error) {
+	switch utils.Bytes2String(content[:3]) {
+	case "---":
+		content = getContent(content, "---")
+		if content == nil {
+			return content, nil
+		}
+		err = yaml.Unmarshal(content, &obj)
+		if err != nil {
+			return rawContent[len(content)+3:], err
+		}
+	case "+++":
+		content = getContent(content, "+++")
+		if content == nil {
+			return content, nil
+		}
+		err = toml.Unmarshal(content, &obj)
+		if err != nil {
+			return rawContent[len(content)+3:], err
+		}
+	case ";;;":
+		content = getContent(content, ";;;")
+		if content == nil {
+			return content, nil
+		}
+		err = json.Unmarshal(content, &obj)
+		if err != nil {
+			return rawContent[len(content)+3:], err
+		}
+	default:
+		return rawContent, nil
+	}
+	return rawContent, nil
 }

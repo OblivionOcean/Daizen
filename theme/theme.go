@@ -32,46 +32,17 @@ func SetTheme(name string, version int) {
 }
 
 func LoadConfig() error {
-	if utils.FileExist("_cfg.yml") {
-		content, err := os.ReadFile("_cfg.yml")
-		if err != nil {
-			return err
-		}
-		err = yaml.Unmarshal(content, &Theme.Cfg)
-		if err != nil {
-			return err
-		}
-	} else if utils.FileExist("_cfg.yaml") {
-		content, err := os.ReadFile("_cfg.yaml")
-		if err != nil {
-			return err
-		}
-		err = yaml.Unmarshal(content, &Theme.Cfg)
-		if err != nil {
-			return err
-		}
-	} else if utils.FileExist("_cfg.json") {
-		content, err := os.ReadFile("_cfg.json")
-		if err != nil {
-			return err
-		}
-		err = json.Unmarshal(content, &Theme.Cfg)
-		if err != nil {
-			return err
-		}
-	} else if utils.FileExist("_cfg.toml") {
-		content, err := os.ReadFile("_cfg.toml")
-		if err != nil {
-			return err
-		}
-		err = toml.Unmarshal(content, &Theme.Cfg)
-		if err != nil {
-			return err
-		}
+	if utils.FileExist("_cfg.theme.yml") {
+		return handleYaml("_cfg.theme.yml")
+	} else if utils.FileExist("_cfg.theme.yaml") {
+		return handleYaml("_cfg.theme.yaml")
+	} else if utils.FileExist("_cfg.theme.json") {
+		return handleJson()
+	} else if utils.FileExist("_cfg.theme.toml") {
+		return handleToml()
 	} else {
 		return errors.New("can't found theme config file.")
 	}
-	return nil
 }
 
 func RegRootLayout(f func(site *model.SiteInfo, page *model.Page, body *bytes.Buffer, buf *bytes.Buffer)) {
@@ -80,4 +51,31 @@ func RegRootLayout(f func(site *model.SiteInfo, page *model.Page, body *bytes.Bu
 
 func GetRootLayout() func(site *model.SiteInfo, page *model.Page, body *bytes.Buffer, buf *bytes.Buffer) {
 	return Theme.RootLayout
+}
+
+func handleYaml(filename string) error {
+	content, err := os.ReadFile(filename)
+	if err != nil {
+		return err
+	}
+	err = yaml.Unmarshal(content, &Theme.Cfg)
+	return err
+}
+
+func handleJson() error {
+	content, err := os.ReadFile("_cfg.theme.json")
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(content, &Theme.Cfg)
+	return err
+}
+
+func handleToml() error {
+	content, err := os.ReadFile("_cfg.theme.toml")
+	if err != nil {
+		return err
+	}
+	err = toml.Unmarshal(content, &Theme.Cfg)
+	return err
 }

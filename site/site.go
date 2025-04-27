@@ -28,44 +28,48 @@ func LoadConfig() error {
 	wd = strings.ReplaceAll(wd, "\\", "/")
 	Site.Wd = wd
 	if utils.FileExist("_cfg.yml") {
-		content, err := os.ReadFile("_cfg.yml")
-		if err != nil {
-			return err
-		}
-		err = yaml.Unmarshal(content, &Site.Cfg)
-		if err != nil {
-			return err
-		}
+		err = handleYaml("_cfg.yml")
 	} else if utils.FileExist("_cfg.yaml") {
-		content, err := os.ReadFile("_cfg.yaml")
-		if err != nil {
-			return err
-		}
-		err = yaml.Unmarshal(content, &Site.Cfg)
-		if err != nil {
-			return err
-		}
+		err = handleYaml("_cfg.yaml")
 	} else if utils.FileExist("_cfg.json") {
-		content, err := os.ReadFile("_cfg.json")
-		if err != nil {
-			return err
-		}
-		err = json.Unmarshal(content, &Site.Cfg)
-		if err != nil {
-			return err
-		}
+		err = handleJson()
 	} else if utils.FileExist("_cfg.toml") {
-		content, err := os.ReadFile("_cfg.toml")
-		if err != nil {
-			return err
-		}
-		err = toml.Unmarshal(content, &Site.Cfg)
-		if err != nil {
-			return err
-		}
+		err = handleToml()
 	} else {
-		return errors.New("can't found site config file.")
+		return errors.New("can't found theme config file.")
 	}
+
+	if err!=nil {
+		return err
+	}
+
 	cache.LoadCache()
 	return theme.LoadConfig()
+}
+
+func handleYaml(filename string) error {
+	content, err := os.ReadFile(filename)
+	if err != nil {
+		return err
+	}
+	err = yaml.Unmarshal(content, &Site.Cfg)
+	return err
+}
+
+func handleJson() error {
+	content, err := os.ReadFile("_cfg.json")
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(content, &Site.Cfg)
+	return err
+}
+
+func handleToml() error {
+	content, err := os.ReadFile("_cfg.toml")
+	if err != nil {
+		return err
+	}
+	err = toml.Unmarshal(content, &Site.Cfg)
+	return err
 }
